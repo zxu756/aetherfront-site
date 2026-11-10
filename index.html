@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aetherfront</title>
+<meta name="description" content="Aetherfront is an original 5v5 lane battler for macOS. Dawn against Dusk across three lanes, playable offline against nine AI players.">
+<meta property="og:title" content="Aetherfront">
+<meta property="og:description" content="An original 5v5 lane battler for macOS. Dawn against Dusk, three lanes, one Core each.">
+<meta property="og:image" content="images/15-map-overview.jpg">
+<link rel="icon" href="images/icon-64.png" type="image/png">
+<link rel="apple-touch-icon" href="images/icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Grenze:wght@600;800&family=Signika:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --forest: #13281b;      /* page ground: the jungle canopy at dusk */
+    --canopy: #1d3a27;      /* raised panels */
+    --leaf:   #e9f0e2;      /* body text */
+    --moss:   #a9bfa6;      /* secondary text */
+    --dawn:   #5b9bff;      /* Dawn team, bottom-left base */
+    --dusk:   #e5485d;      /* Dusk team, top-right base */
+    --aether: #f2c14e;      /* aether gold: Cores, epic monsters, gold */
+    --river:  #2f8f97;
+    --measure: 34rem;
+  }
+  * { box-sizing: border-box; }
+  html { background: var(--forest); color-scheme: dark; }
+  body {
+    margin: 0;
+    background: var(--forest);
+    color: var(--leaf);
+    font: 400 1.0625rem/1.6 "Signika", "Avenir Next", "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  img { display: block; max-width: 100%; height: auto; }
+  a { color: var(--aether); text-underline-offset: 0.18em; }
+  a:focus-visible { outline: 2px solid var(--aether); outline-offset: 3px; border-radius: 2px; }
+
+  /* Hero: the whole map, with the title planted where the bases would be */
+  .hero {
+    position: relative;
+    min-height: min(92vh, 56rem);
+    display: grid;
+    align-items: end;
+    overflow: hidden;
+  }
+  .hero > img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+  }
+  .hero::after {
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(to top, var(--forest) 0%, rgba(19, 40, 27, 0.86) 30%, rgba(19, 40, 27, 0.15) 70%, rgba(19, 40, 27, 0.35) 100%);
+  }
+  .hero-text {
+    position: relative; z-index: 1;
+    padding: 0 clamp(1rem, 5vw, 4.5rem) clamp(2.5rem, 7vh, 5rem);
+    max-width: 62rem;
+  }
+  h1 {
+    font-family: "Grenze", Georgia, serif;
+    font-weight: 800;
+    font-size: clamp(3.6rem, 13vw, 9.5rem);
+    line-height: 0.86;
+    letter-spacing: -0.01em;
+    margin: 0;
+    text-shadow: 0 0.06em 0.4em rgba(0, 0, 0, 0.45);
+  }
+  /* The one bold device: the front line. Dawn meets Dusk at the aether. */
+  .frontline {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    width: min(100%, 30rem);
+    margin: 1.4rem 0 1.5rem;
+  }
+  .frontline span { height: 0.5rem; }
+  .frontline .dawn { background: var(--dawn); border-radius: 999px 0 0 999px; }
+  .frontline .dusk { background: var(--dusk); border-radius: 0 999px 999px 0; }
+  .frontline .core {
+    width: 1.35rem; height: 1.35rem; margin: 0 -0.2rem;
+    background: var(--aether);
+    transform: rotate(45deg);
+    box-shadow: 0 0 1.1rem rgba(242, 193, 78, 0.75);
+    z-index: 1;
+  }
+  .lede {
+    font-size: clamp(1.15rem, 2.2vw, 1.45rem);
+    line-height: 1.45;
+    max-width: var(--measure);
+    margin: 0 0 1.25rem;
+  }
+  .facts {
+    display: flex; flex-wrap: wrap; gap: 0.5rem 1.75rem;
+    margin: 0; padding: 0; list-style: none;
+    color: var(--moss);
+  }
+
+  main { padding: 0 clamp(1rem, 5vw, 4.5rem); }
+  section { max-width: 72rem; margin: 0 auto; padding: clamp(3.5rem, 9vw, 6.5rem) 0; }
+  section + section { border-top: 1px solid rgba(169, 191, 166, 0.18); }
+  h2 {
+    font-family: "Grenze", Georgia, serif;
+    font-weight: 600;
+    font-size: clamp(2.1rem, 5vw, 3.2rem);
+    line-height: 1.02;
+    margin: 0 0 1rem;
+  }
+  h3 { font-size: 1.15rem; font-weight: 600; margin: 0; line-height: 1.3; }
+  p { margin: 0 0 1rem; max-width: var(--measure); }
+  .shot { border-radius: 6px; box-shadow: 0 1.2rem 3rem rgba(0, 0, 0, 0.35); }
+
+  /* Dawn vs Dusk */
+  .sides {
+    display: grid; gap: 2.5rem;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    align-items: center;
+  }
+  .teams { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-top: 1.75rem; }
+  .team { padding-left: 0.9rem; }
+  .team p { color: var(--moss); margin: 0.2rem 0 0; }
+  .team.dawn { border-left: 4px solid var(--dawn); }
+  .team.dusk { border-left: 4px solid var(--dusk); }
+
+  /* Champions */
+  .roster { display: grid; grid-template-columns: repeat(auto-fit, minmax(13.5rem, 1fr)); gap: 1.75rem 2rem; margin-top: 2.5rem; }
+  .champ .role { color: var(--aether); font-size: 0.95rem; margin: 0.1rem 0 0.45rem; }
+  .champ p:last-child { color: var(--moss); margin: 0; }
+
+  /* River */
+  .river { display: grid; gap: 2.5rem; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); align-items: center; }
+  .epic { margin-top: 1.5rem; }
+  .epic .when { color: var(--aether); }
+  .epic p { color: var(--moss); margin-top: 0.25rem; }
+
+  footer {
+    padding: 2.5rem clamp(1rem, 5vw, 4.5rem) 3.5rem;
+    color: var(--moss);
+    font-size: 0.95rem;
+    border-top: 1px solid rgba(169, 191, 166, 0.18);
+  }
+  footer p { max-width: 44rem; }
+
+  @media (max-width: 760px) {
+    .sides, .river { grid-template-columns: 1fr; }
+    .river .shot { order: -1; }
+    .teams { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <img src="images/15-map-overview.jpg" alt="Top-down view of the Aetherfront map: a river crosses the jungle between dirt lanes, with the Ancient Colossus at the top and the Ember Wyrm at the bottom right." width="1440" height="900">
+  <div class="hero-text">
+    <h1>Aetherfront</h1>
+    <div class="frontline" aria-hidden="true"><span class="dawn"></span><span class="core"></span><span class="dusk"></span></div>
+    <p class="lede">An original five-against-five lane battler for macOS. Push three lanes, take down the towers, and break the enemy Core.</p>
+    <ul class="facts">
+      <li>Five champions</li>
+      <li>Sixteen items</li>
+      <li>You and nine AI players</li>
+      <li>Runs fully offline</li>
+    </ul>
+  </div>
+</header>
+
+<main>
+  <section class="sides" aria-labelledby="sides-title">
+    <div>
+      <h2 id="sides-title">Dawn against Dusk</h2>
+      <p>Two teams of five start in opposite corners. Minions march down the top, middle and bottom lanes every wave. Towers and barracks fall in order, and the match ends the moment a team breaks the other side's Core.</p>
+      <p>Between the lanes is jungle: camps to clear for gold, 22 patches of tall brush to hide in, and fog of war that hides anything your team can't see.</p>
+      <div class="teams">
+        <div class="team dawn"><h3>Dawn</h3><p>Blue and gold, based in the bottom-left corner.</p></div>
+        <div class="team dusk"><h3>Dusk</h3><p>Crimson and violet, based in the top-right corner.</p></div>
+      </div>
+    </div>
+    <img class="shot" src="images/03-lane-clash-mid.jpg" alt="Two mages meet with their minions in the middle lane where it crosses the river." width="1440" height="900" loading="lazy">
+  </section>
+
+  <section aria-labelledby="roster-title">
+    <h2 id="roster-title">Five champions</h2>
+    <p>Each one owns a lane and a job. Every champion has a passive and four abilities on Q, W, E and R.</p>
+    <img class="shot" src="images/05-champions-lineup.jpg" alt="All five champions lined up for each team: Varek, Isolde, Tavi, Borrin and Vesper." width="1440" height="900" loading="lazy">
+    <div class="roster">
+      <div class="champ">
+        <h3>Varek, the Iron Warden</h3>
+        <p class="role">Top lane fighter</p>
+        <p>Axe and shield. Cleaves, shields up, charges into the first enemy in the way, then leaps in to knock a whole group into the air.</p>
+      </div>
+      <div class="champ">
+        <h3>Isolde, the Stormcaller</h3>
+        <p class="role">Mid lane mage</p>
+        <p>Throws lightning, drops a slowing static field, blinks out of trouble and calls down a storm of five strikes.</p>
+      </div>
+      <div class="champ">
+        <h3>Tavi, the Windarcher</h3>
+        <p class="role">Bottom lane marksman</p>
+        <p>Every fourth shot hits harder. Tumbles, pierces a line of enemies and fires a huge long-range arrow that stuns the first champion it hits.</p>
+      </div>
+      <div class="champ">
+        <h3>Borrin, the Stonehide</h3>
+        <p class="role">Support tank</p>
+        <p>Takes less damage from minions and towers, shields the nearest ally, rams enemies into the air and shatters the ground to stun.</p>
+      </div>
+      <div class="champ">
+        <h3>Vesper, the Duskblade</h3>
+        <p class="role">Jungle assassin</p>
+        <p>Hunts camps, turns invisible, poisons with a fan of daggers and finishes wounded champions for up to double damage.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="river" aria-labelledby="river-title">
+    <img class="shot" src="images/12-epic-wyrm.jpg" alt="The Ember Wyrm, a red winged monster, waiting in the river." width="1440" height="900" loading="lazy">
+    <div>
+      <h2 id="river-title">Two monsters in the river</h2>
+      <p>The river splits the map in two. Fight over it when the big monsters wake up.</p>
+      <div class="epic">
+        <h3>Ember Wyrm</h3>
+        <p><span class="when">Bottom river, from 5:00.</span> Each kill gives the whole team gold and a permanent stack of extra attack damage and ability power.</p>
+      </div>
+      <div class="epic">
+        <h3>Ancient Colossus</h3>
+        <p><span class="when">Top river, from 15:00.</span> Gives every living ally three minutes of bonus damage, a four-second recall and stronger minions nearby.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>Aetherfront is in development for macOS 13 and later. The champions, map, items, art and sound were all made for this game.</p>
+</footer>
+
+</body>
+</html>
