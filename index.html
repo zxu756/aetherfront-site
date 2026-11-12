@@ -100,6 +100,31 @@
     margin: 0; padding: 0; list-style: none;
     color: var(--moss);
   }
+  .cta {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 0.9rem 1.4rem;
+    margin-top: 1.6rem;
+  }
+  .btn-download {
+    display: inline-block;
+    padding: 0.68rem 1.35rem;
+    background: var(--aether);
+    color: var(--forest);
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 5px;
+    box-shadow: 0 0.5rem 1.6rem rgba(0, 0, 0, 0.35);
+    transition: transform 0.12s ease, filter 0.12s ease;
+  }
+  .btn-download:hover { filter: brightness(1.06); transform: translateY(-1px); }
+  .cta-meta { color: var(--moss); font-size: 0.95rem; }
+  code {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 0.9em;
+    background: var(--canopy);
+    color: var(--leaf);
+    padding: 0.15em 0.42em;
+    border-radius: 4px;
+  }
 
   main { padding: 0 clamp(1rem, 5vw, 4.5rem); }
   section { max-width: 72rem; margin: 0 auto; padding: clamp(3.5rem, 9vw, 6.5rem) 0; }
@@ -167,6 +192,10 @@
       <li>You and nine AI players</li>
       <li>Runs fully offline</li>
     </ul>
+    <div class="cta">
+      <a class="btn-download" href="https://github.com/zxu756/aetherfront-site/releases/download/v0.1.0-alpha/Aetherfront-v0.1.0-macos-universal.zip">Download for macOS (v0.1.0-alpha)</a>
+      <span class="cta-meta">macOS 13+ · Universal (Apple Silicon &amp; Intel)</span>
+    </div>
   </div>
 </header>
 
@@ -235,7 +264,8 @@
 </main>
 
 <footer>
-  <p>Aetherfront is in development for macOS 13 and later. The champions, map, items, art and sound were all made for this game.</p>
+  <p>Aetherfront v0.1.0-alpha for macOS 13 and later (<a href="https://github.com/zxu756/aetherfront-site/releases/tag/v0.1.0-alpha">release notes &amp; download</a>). The champions, map, items, art and sound were all made for this game.</p>
+  <p>The build is ad-hoc signed rather than notarized: after moving <code>Aetherfront.app</code> to <code>/Applications</code>, run <code>xattr -cr /Applications/Aetherfront.app</code> once before first launch.</p>
 </footer>
 
 </body>
